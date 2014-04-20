@@ -5,8 +5,7 @@ use warnings;
 
 our $VERSION = "0.01";
 
-use Data::Section::Simple;
-use Text::Xslate;
+use Text::MicroTemplate;
 
 sub generate {
     my $class = shift;
@@ -15,18 +14,12 @@ sub generate {
     my $package = $args{package};
     my @constants = @{ $args{constants} };
 
-    my $tx = Text::Xslate->new(
-        path => [
-            Data::Section::Simple->new->get_data_section,
-        ],
-    );
-
     my @consts;
     while (my ($name, $value) = splice @constants, 0, 2) {
         my $comment;
         if (ref $value) {
-            $value   = $value->{value};
             $comment = $value->{comment};
+            $value   = $value->{value};
         }
 
         push @consts, {
@@ -36,25 +29,36 @@ sub generate {
         };
     }
 
-    my $pm = $tx->render('Const.pm.tx', {
+    my $gen = Text::MicroTemplate->new(
+        template    => $class->_template,
+        escape_func => sub {shift},
+    )->build;
+
+    $gen->(
         package => $package,
         consts  => \@consts
-    });
+    )->as_string;
 }
 
-1;
-__DATA__
-@@ Const.pm.tx
-package <: package :>;
+sub _template {
+    <<'...';
+? my %args = @_;
+? use Scalar::Util qw/looks_like_number/;
+package <?= $args{package} ?>;
 use strict;
 use warnings;
 use utf8;
 
 use Const::Common (
-: for $consts -> $const {
-    <: $const.name :> => <: $const.value :>,<: if $const.comment { :># <: $const.comment :><: } :>
-: }
+? for my $const (@{ $args{consts} }) {
+? my $v = $const->{value};
+    <?= $const->{name} ?> => <?= looks_like_number($v) ? '' : "'" ?><?= $v ?><?= looks_like_number($v) ? '' : "'" ?>,<? if ($const->{comment}) { ?> # <?= $const->{comment} ?><? } ?>
+? }
 );
+
+1;
+...
+}
 
 1;
 __END__
