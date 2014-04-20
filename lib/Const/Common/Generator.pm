@@ -67,15 +67,38 @@ __END__
 
 =head1 NAME
 
-Const::Common::Generator - It's new $module
+Const::Common::Generator - Auto generate constant package of Const::Common
 
 =head1 SYNOPSIS
 
     use Const::Common::Generator;
+    my $pm = Const::Common::Generator->generate(
+        package => 'Hoge::Piyo',
+        constants => [
+            HO => 'GE',
+            FU => {
+                value => 'GA',
+                comment => 'fuga',
+            },
+            PI => 3.14,
+        ],
+    ),
 
 =head1 DESCRIPTION
 
-Const::Common::Generator is ...
+Const::Common::Generator is a module for generating constant package of Const::Common
+
+=head1 METHOD
+
+=head2 C<< $str = Const::Common::Generator->generate(%opt) >>
+
+=over
+
+=item C<package>
+
+=item C<constants>
+
+=back
 
 =head1 LICENSE
 

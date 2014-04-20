@@ -1,5 +1,5 @@
 {
-   "abstract" : "It's new $module",
+   "abstract" : "Auto generate constant package of Const::Common",
    "author" : [
       "Songmu <y.songmu@gmail.com>"
    ],
@@ -44,7 +44,8 @@
       },
       "runtime" : {
          "requires" : {
-            "perl" : "5.008005"
+            "Text::MicroTemplate" : "0",
+            "perl" : "5.008001"
          }
       },
       "test" : {
@@ -54,5 +55,17 @@
       }
    },
    "release_status" : "unstable",
-   "version" : "0.01"
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/Songmu/p5-Const-Common-Generator/issues"
+      },
+      "homepage" : "https://github.com/Songmu/p5-Const-Common-Generator",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/Songmu/p5-Const-Common-Generator.git",
+         "web" : "https://github.com/Songmu/p5-Const-Common-Generator"
+      }
+   },
+   "version" : "0.01",
+   "x_authority" : "cpan:SONGMU"
 }
